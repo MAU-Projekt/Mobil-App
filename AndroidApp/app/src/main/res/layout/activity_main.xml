@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="auto"
+    android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".MainActivity">
 
@@ -46,37 +46,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnTand" />
 
-    <TextView
-        android:id="@+id/textlight"
+    <fragment
+        android:id="@+id/Fragment"
+        android:name="com.example.projektkruka.Fragment1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSlack"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+
+    <Button
+        android:id="@+id/btnkruka1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="190dp"
-        android:layout_marginLeft="190dp"
-        android:layout_marginTop="280dp"
-        android:layout_marginEnd="190dp"
-        android:layout_marginRight="190dp"
-        android:layout_marginBottom="7dp"
-        android:text="Light"
-        app:layout_constraintBottom_toTopOf="@+id/outputTextView"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="ChangeFragment"
+        android:text="KRUKA1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/outputTextView"
+    <Button
+        android:id="@+id/btnkruka2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="200dp"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="199dp"
-        android:layout_marginRight="199dp"
-        android:layout_marginBottom="395dp"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginBottom="505dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="ChangeFragment"
+        android:text="KRUKA2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textlight" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
