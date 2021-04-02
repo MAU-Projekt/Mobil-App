@@ -3,6 +3,8 @@ package com.example.projektkruka;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        outputText = (TextView) findViewById(R.id.outputTextView);
-        outputText.setText(String.valueOf(lightvalue));
+        outputText = findViewById(R.id.outputTextView);
 
         Button btnTand = findViewById(R.id.btnTand);
         Button btnSlack = findViewById(R.id.btnSlack);
         Button btnUpdate = findViewById(R.id.btnUpdate);
+
 
         btnTand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,12 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                lightvalue = getSiteString("https://tools.learningcontainer.com/sample-json-file.json");
+                lightvalue = getSiteString("https://jsonplaceholder.typicode.com/todos/1");
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        outputText = findViewById(R.id.outputTextView);
+                        System.out.println(lightvalue.toString());
                         outputText.setText(lightvalue);
+
 
                     }
                 });
@@ -115,26 +120,8 @@ public class MainActivity extends AppCompatActivity {
             return output;
 
 
+
     }
-
-
-    public void ChangeFragment(View view) {
-        Fragment fragment;
-        if (view == findViewById(R.id.btnkruka1)) {
-            fragment = new Fragment1();
-            FragmentManager fm = getSupportFragmentManager();
-            androidx.fragment.app.FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.Fragment, fragment);
-            ft.commit();
-        }
-        if (view == findViewById(R.id.btnkruka2)) {
-            fragment = new Fragment2();
-            FragmentManager fm = getSupportFragmentManager();
-            androidx.fragment.app.FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.Fragment, fragment);
-            ft.commit();
-        }
-        }
 
 
 
