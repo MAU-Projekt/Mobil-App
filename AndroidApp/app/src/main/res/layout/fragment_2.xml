@@ -16,7 +16,7 @@
         android:layout_marginTop="491dp"
         android:layout_marginEnd="160dp"
         android:layout_marginRight="160dp"
-        android:layout_marginBottom="192dp"
+        android:layout_marginBottom="130dp"
         android:clickable="true"
         android:focusable="true"
         android:text="kruka1"
@@ -26,4 +26,34 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/texttemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginBottom="27dp"
+        android:text="Temp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.376"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.069" />
+
+    <TextView
+        android:id="@+id/outputTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_marginBottom="616dp"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.001" />
 </androidx.constraintlayout.widget.ConstraintLayout>

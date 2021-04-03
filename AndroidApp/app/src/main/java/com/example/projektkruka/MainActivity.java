@@ -1,29 +1,28 @@
 package com.example.projektkruka;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.app.FragmentTransaction;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     private TextView outputText;
+    private TextView outputText2;
     private String lightvalue;
+    private String tempvalue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         btnTand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Tänd");
-
+                doOtherStuff();
             }
         });
         btnSlack.setOnClickListener(new View.OnClickListener() {
@@ -66,17 +64,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 lightvalue = getSiteString("https://jsonplaceholder.typicode.com/todos/1");
+                tempvalue = getSiteString("https://jsonplaceholder.typicode.com/todos/1");
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         outputText = findViewById(R.id.outputTextView);
+                        outputText2 = findViewById(R.id.outputTextView2);
                         System.out.println(lightvalue.toString());
-                        outputText.setText(lightvalue);
+                        if(outputText != null) {
+                            outputText.setText(lightvalue);
+                        }
+                        if(outputText2 != null) {
+                            outputText2.setText(tempvalue);
+                        }
 
 
                     }
                 });
+
+            }
+        }).start();
+    }
+
+    private void doOtherStuff(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendSiteString("https://jsonplaceholder.typicode.com/todos/1","Tänd");
 
             }
         }).start();
@@ -118,6 +133,46 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             return output;
+
+
+
+    }
+    private void sendSiteString(String site, String message){
+        HttpURLConnection connection = null;
+        URL url;
+        BufferedWriter writer = null;
+        String output = "";
+
+        try {
+            url = new URL(site);
+            connection =(HttpURLConnection) url.openConnection();
+            connection.connect();
+            OutputStream stream = connection.getOutputStream();
+            writer = new BufferedWriter(new OutputStreamWriter(stream));
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+            while(message != null){
+                buffer.append(message);
+            }
+            writer.write(String.valueOf(buffer));
+
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            if(connection != null) {
+                connection.disconnect();
+            }
+            try {
+                if(writer != null){
+                    writer.close();}
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
 
 
