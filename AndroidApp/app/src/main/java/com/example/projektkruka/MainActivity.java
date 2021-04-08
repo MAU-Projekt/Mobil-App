@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
                 output = (jsonObject.toString(4));// 4 is number of spaces for indent;
-                output = output.replaceAll("[{}]","");
+                output = output.replaceAll("[{}\"]","");
 
 
 
