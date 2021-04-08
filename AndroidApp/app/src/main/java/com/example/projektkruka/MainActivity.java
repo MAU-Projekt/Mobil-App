@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -71,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         outputText = findViewById(R.id.outputTextView);
                         outputText2 = findViewById(R.id.outputTextView2);
-                        System.out.println(lightvalue.toString());
                         if(outputText != null) {
                             outputText.setText(lightvalue);
                         }
@@ -114,14 +116,19 @@ public class MainActivity extends AppCompatActivity {
                 while((line = reader.readLine()) != null){
                     buffer.append(line);
                 }
-                output = buffer.toString();
+                JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
+                output = (jsonObject.toString(4));// 4 is number of spaces for indent;
+                output = output.replaceAll("[{}]","");
+
 
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally{
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally{
                 if(connection != null) {
                     connection.disconnect();
                 }
