@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                lightvalue = getSiteString("https://jsonplaceholder.typicode.com/todos/1");
-                tempvalue = getSiteString("https://jsonplaceholder.typicode.com/todos/1");
+                lightvalue = getSiteString("http://84.217.9.249:3000/sensor/kuga");
+                tempvalue = getSiteString("http://84.217.9.249:3000/sensor/kuga");
 
                 runOnUiThread(new Runnable() {
                     @Override
