@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DD1212"
+    android:background="#753A3636"
     tools:context=".Fragment1">
 
     <Button
@@ -20,7 +20,9 @@
         android:clickable="true"
         android:focusable="true"
         android:text="kruka1"
+        android:textColor="@color/black"
         android:visibility="visible"
+        app:backgroundTint="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
