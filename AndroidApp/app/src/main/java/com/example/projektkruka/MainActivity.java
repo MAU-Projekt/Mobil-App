@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +26,8 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
     private TextView outputText;
     private TextView outputText2;
-    private String lightvalue;
-    private String tempvalue;
+    private String value1;
+    private String value2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnTand = findViewById(R.id.btnTand);
         Button btnSlack = findViewById(R.id.btnSlack);
-        Button btnUpdate = findViewById(R.id.btnUpdate);
+        FloatingActionButton btnUpdate = findViewById(R.id.btnUpdate);
+
 
 
         btnTand.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                lightvalue = getSiteString("http://84.217.9.249:3000/sensor/kuga");
-                tempvalue = getSiteString("http://84.217.9.249:3000/sensor/kuga");
+                value1 = getSiteString("http://84.217.9.249:3000/sensor/kuga");
+                value2 = getSiteString("http://84.217.9.249:3000/sensor/kuga");
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -75,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
                         outputText = findViewById(R.id.outputTextView);
                         outputText2 = findViewById(R.id.outputTextView2);
                         if(outputText != null) {
-                            outputText.setText(lightvalue);
+                            outputText.setText(value1);
                         }
                         if(outputText2 != null) {
-                            outputText2.setText(tempvalue);
+                            outputText2.setText(value2);
                         }
 
 
@@ -148,20 +151,20 @@ public class MainActivity extends AppCompatActivity {
         HttpURLConnection connection = null;
         URL url;
         BufferedWriter writer = null;
-        String output = "";
 
         try {
             url = new URL(site);
             connection =(HttpURLConnection) url.openConnection();
             connection.connect();
+            connection.setDoOutput(true);
             OutputStream stream = connection.getOutputStream();
             writer = new BufferedWriter(new OutputStreamWriter(stream));
             StringBuffer buffer = new StringBuffer();
-            String line = "";
             while(message != null){
                 buffer.append(message);
             }
             writer.write(String.valueOf(buffer));
+            writer.flush();
 
 
         } catch (MalformedURLException e) {

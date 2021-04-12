@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#753A3636"
+    android:background="#6B3A3636"
     tools:context=".Fragment1">
 
     <TextView
@@ -51,7 +51,7 @@
         android:text="Kruka2"
         android:textColor="@color/black"
         android:visibility="visible"
-        app:backgroundTint="@color/teal_200"
+        app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
