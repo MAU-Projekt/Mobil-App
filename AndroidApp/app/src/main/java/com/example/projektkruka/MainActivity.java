@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sendSiteString("https://jsonplaceholder.typicode.com/todos/1","Tänd");
+                sendSiteString("http://84.217.9.249:3000/sensor/kuga","Tand");
 
             }
         }).start();
@@ -155,15 +155,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             url = new URL(site);
             connection =(HttpURLConnection) url.openConnection();
-            connection.connect();
+           // connection.connect();
             connection.setDoOutput(true);
             OutputStream stream = connection.getOutputStream();
             writer = new BufferedWriter(new OutputStreamWriter(stream));
-            StringBuffer buffer = new StringBuffer();
-            while(message != null){
-                buffer.append(message);
-            }
-            writer.write(String.valueOf(buffer));
+            //StringBuffer buffer = new StringBuffer();
+            //buffer.append(message);
+            writer.write(message);
             writer.flush();
 
 
