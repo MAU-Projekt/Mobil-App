@@ -45,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
         btnTand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doOtherStuff();
+                tandLampa();
             }
         });
         btnSlack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Släck");
+                slackLampa();
 
             }
         });
@@ -59,18 +59,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                doStuff();
+                getData();
             }
         });
     }
 
-    private void doStuff(){
+    private void getData(){
         new Thread(new Runnable(){
 
             @Override
             public void run() {
-                value1 = getSiteString("http://84.217.9.249:3000/sensor/kuga");
-                value2 = getSiteString("http://84.217.9.249:3000/sensor/kuga");
+                value1 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
+                value2 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -92,11 +92,20 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void doOtherStuff(){
+    private void tandLampa(){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sendSiteString("http://84.217.9.249:3000/sensor/kuga","Tand");
+                sendSiteString("http://84.217.9.249:3000/light/kugaljus","PUT");
+
+            }
+        }).start();
+    }
+    private void slackLampa(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendSiteString("http://84.217.9.249:3000/light/kugaljus","DELETE");
 
             }
         }).start();
@@ -155,14 +164,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             url = new URL(site);
             connection =(HttpURLConnection) url.openConnection();
-           // connection.connect();
             connection.setDoOutput(true);
+            connection.setRequestMethod(message);
             OutputStream stream = connection.getOutputStream();
             writer = new BufferedWriter(new OutputStreamWriter(stream));
-            //StringBuffer buffer = new StringBuffer();
-            //buffer.append(message);
             writer.write(message);
             writer.flush();
+            connection.getInputStream();
 
 
         } catch (MalformedURLException e) {
