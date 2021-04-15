@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnTand = findViewById(R.id.btnTand);
         Button btnSlack = findViewById(R.id.btnSlack);
-        FloatingActionButton btnUpdate = findViewById(R.id.btnUpdate);
-
 
 
         btnTand.setOnClickListener(new View.OnClickListener() {
@@ -55,42 +53,41 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                getData();
-            }
-        });
+        getData();
     }
 
-    private void getData(){
-        new Thread(new Runnable(){
 
-            @Override
-            public void run() {
-                value1 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
-                value2 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
+    private void getData() {
+            new Thread(new Runnable() {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        outputText = findViewById(R.id.outputTextView);
-                        outputText2 = findViewById(R.id.outputTextView2);
-                        if(outputText != null) {
-                            outputText.setText(value1);
+                @Override
+                public void run() {
+                    while(true){
+                    value1 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
+                    value2 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            outputText = findViewById(R.id.outputTextView);
+                            outputText2 = findViewById(R.id.outputTextView2);
+                            if (outputText != null) {
+                                outputText.setText(value1);
+                            }
+                            if (outputText2 != null) {
+                                outputText2.setText(value2);
+                            }
                         }
-                        if(outputText2 != null) {
-                            outputText2.setText(value2);
-                        }
-
-
-                    }
-                });
-
-            }
-        }).start();
-    }
+                    });
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }           }
+                }
+            }).start();
+        }
 
     private void tandLampa(){
         new Thread(new Runnable() {

@@ -13,6 +13,7 @@
         <action
             android:id="@+id/action_fragment1_to_fragment2"
             app:destination="@id/fragment2"
+            app:enterAnim="@android:anim/slide_in_left"
             app:popUpTo="@id/fragment1" />
     </fragment>
     <fragment
@@ -21,6 +22,7 @@
         android:label="Fragment2" >
         <action
             android:id="@+id/action_fragment2_to_fragment1"
-            app:destination="@id/fragment1" />
+            app:destination="@id/fragment1"
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
 </navigation>
