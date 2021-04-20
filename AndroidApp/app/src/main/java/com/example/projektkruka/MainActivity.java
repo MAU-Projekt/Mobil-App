@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     while(true){
-                    value1 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
-                    value2 = getSiteString("http://84.217.9.249:3000/light/kugaljus");
+                    value1 = getSiteString("http://84.217.9.249:3000/sensor/pi/now");
+                    value2 = getSiteString("http://84.217.9.249:3000/sensor/pi/now");
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     try {
-                        Thread.sleep(4000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }           }
@@ -127,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
                 output = (jsonObject.toString(4));// 4 is number of spaces for indent;
-                output = output.replaceAll("[{}\"]","");
-
+                output = output.replace("cpu_thermal-virtual-0","").replace("Adapter","").replace("rpi_volt-isa-0000","").replace("in0_lcrit_alarm","").replace("ISA adapter","").replace("in0","").replace(": 0","").replace("Virtual device","");
+                output = output.replaceAll("[,:{}\"]","");
 
 
             } catch (MalformedURLException e) {
