@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sendSiteString("http://84.217.9.249:3000/light/kugaljus","PUT");
+                sendSiteString("http://84.217.9.249:80/light/kugaljus","PUT");
 
             }
         }).start();
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sendSiteString("http://84.217.9.249:3000/light/kugaljus","DELETE");
+                sendSiteString("http://84.217.9.249:80/light/kugaljus","DELETE");
 
             }
         }).start();
@@ -153,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     buffer.append(line);
                 }
                 JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
-                output = jsonObject.getJSONObject("cpu_thermal-virtual-0").getString("temp1");
+                //output = jsonObject.getJSONObject("cpu_thermal-virtual-0").getString("temp1");
+                output = jsonObject.toString();
                 output = output.replaceAll("[{}\"]","");
 
 
@@ -231,20 +232,22 @@ public class MainActivity extends AppCompatActivity {
         if(result != null){
             if(result.getContents() != null){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(result.getContents());
-                builder.setTitle("Scanning Result");
-                AlertDialog dialog = builder.create();
-                dialog.show();
                 krukorTot = krukorTot+1;
                 if(krukorTot == 1){
                     url1 = result.getContents();
                     editor.putString("url1", result.getContents()); // Storing string
                     editor.apply();
+                    builder.setMessage("KRUKA1 tillagd");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
                 else if(krukorTot ==2){
                     url2 = result.getContents();
                     editor.putString("url2", result.getContents()); // Storing string
                     editor.apply();
+                    builder.setMessage("KRUKA2 tillagd");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
 
                 }
 
