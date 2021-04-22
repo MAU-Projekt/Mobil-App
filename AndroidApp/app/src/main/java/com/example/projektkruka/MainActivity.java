@@ -1,13 +1,21 @@
 package com.example.projektkruka;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView outputText2;
     private String value1;
     private String value2;
+    private String url1;
+    private String url2;
+    private int krukorTot = 0;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +52,14 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnTand = findViewById(R.id.btnTand);
         Button btnSlack = findViewById(R.id.btnSlack);
+        FloatingActionButton btnAdd = findViewById(R.id.btnaddqr);
 
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // create sharedPreference
+        editor = pref.edit(); // create editor
+        url1 = pref.getString("url1", null); // getting String
+        url2 = pref.getString("url2", null); // getting String
+        System.out.println(url1);
+        System.out.println(url2);
 
         btnTand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanCode();
+            }
+        });
 
         getData();
     }
@@ -64,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     while(true){
-                    value1 = getSiteString("http://84.217.9.249:3000/sensor/pi/now");
-                    value2 = getSiteString("http://84.217.9.249:3000/sensor/pi/now");
+                    value1 = getSiteString(url1);//url1
+                    value2 = getSiteString(url2);//url2
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -126,9 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     buffer.append(line);
                 }
                 JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
-                output = (jsonObject.toString(4));// 4 is number of spaces for indent;
-                output = output.replace("cpu_thermal-virtual-0","").replace("Adapter","").replace("rpi_volt-isa-0000","").replace("in0_lcrit_alarm","").replace("ISA adapter","").replace("in0","").replace(": 0","").replace("Virtual device","");
-                output = output.replaceAll("[,:{}\"]","");
+                output = jsonObject.getJSONObject("cpu_thermal-virtual-0").getString("temp1");
+                output = output.replaceAll("[{}\"]","");
 
 
             } catch (MalformedURLException e) {
@@ -188,6 +214,50 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+    private void scanCode(){
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(CaptureAct.class);
+        integrator.setOrientationLocked(false);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scanning code");
+        integrator.initiateScan();
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if(result != null){
+            if(result.getContents() != null){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(result.getContents());
+                builder.setTitle("Scanning Result");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                krukorTot = krukorTot+1;
+                if(krukorTot == 1){
+                    url1 = result.getContents();
+                    editor.putString("url1", result.getContents()); // Storing string
+                    editor.apply();
+                }
+                else if(krukorTot ==2){
+                    url2 = result.getContents();
+                    editor.putString("url2", result.getContents()); // Storing string
+                    editor.apply();
+
+                }
+
+
+
+            }
+            else{
+                Toast.makeText(this, "no result", Toast.LENGTH_LONG).show();
+
+            }
+        }else{
+            super.onActivityResult(requestCode, resultCode, data);
+        }
 
     }
 

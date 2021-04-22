@@ -15,6 +15,7 @@
         android:layout_marginLeft="70dp"
         android:layout_marginBottom="27dp"
         android:text="KRUKA1"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.369"
@@ -31,10 +32,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.091"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textlight"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintVertical_bias="0.026" />
 
     <Button
         android:id="@+id/btnKruka2"
