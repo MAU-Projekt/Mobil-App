@@ -15,6 +15,10 @@
             app:destination="@id/fragment2"
             app:enterAnim="@android:anim/slide_in_left"
             app:popUpTo="@id/fragment1" />
+        <action
+            android:id="@+id/action_fragment1_to_fragmentgraph1"
+            app:destination="@id/fragmentgraph1"
+            app:popUpTo="@id/fragment1" />
     </fragment>
     <fragment
         android:id="@+id/fragment2"
@@ -25,4 +29,8 @@
             app:destination="@id/fragment1"
             app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentgraph1"
+        android:name="com.example.projektkruka.Fragmentgraph1"
+        android:label="Fragmentgraph1" />
 </navigation>

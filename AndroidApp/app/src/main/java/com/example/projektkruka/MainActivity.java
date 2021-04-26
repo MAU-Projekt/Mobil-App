@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private int krukorTot = 0;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private LineGraphSeries<DataPoint> series;
+    private GraphView graph;
 
 
     @Override
@@ -60,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
         url2 = pref.getString("url2", null); // getting String
         System.out.println(url1);
         System.out.println(url2);
+
+        double y,x;
+        x = 0.0;
+
+        series= new LineGraphSeries<DataPoint>();
+        for(int i =0; i<500; i++){
+            x = x + 0.1;
+            y = Math.sin(x);
+            series.appendData(new DataPoint(x, y), true, 500);
+        }
 
         btnTand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,11 +114,15 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             outputText = findViewById(R.id.outputTextView);
                             outputText2 = findViewById(R.id.outputTextView2);
+                            graph = (GraphView) findViewById(R.id.tempgraph);
                             if (outputText != null) {
                                 outputText.setText(value1);
                             }
                             if (outputText2 != null) {
                                 outputText2.setText(value2);
+                            }
+                            if(graph != null) {
+                                graph.addSeries(series);
                             }
                         }
                     });

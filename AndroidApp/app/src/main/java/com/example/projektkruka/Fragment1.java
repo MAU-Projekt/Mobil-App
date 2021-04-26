@@ -32,10 +32,18 @@ public class Fragment1 extends Fragment {
         NavController navController = Navigation.findNavController(view);
 
         Button button2 = view.findViewById(R.id.btnKruka2);
+        Button button3 = view.findViewById(R.id.btngraph1);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.action_fragment1_to_fragment2);
+
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_fragment1_to_fragmentgraph1);
 
             }
         });
