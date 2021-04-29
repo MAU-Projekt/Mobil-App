@@ -1,15 +1,15 @@
 package com.example.projektkruka;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -44,8 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private int krukorTot = 0;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private LineGraphSeries<DataPoint> series;
-    private GraphView graph;
+    private LineGraphSeries<DataPoint> seriestemp;
+    private LineGraphSeries<DataPoint> serieshum;
+    private GraphView graphtemp;
+    private GraphView graphhum;
+    private int x = 0;
+    private int y;
 
 
     @Override
@@ -66,15 +70,12 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(url1);
         System.out.println(url2);
 
-        double y,x;
-        x = 0.0;
-
-        series= new LineGraphSeries<DataPoint>();
-        for(int i =0; i<500; i++){
-            x = x + 0.1;
-            y = Math.sin(x);
-            series.appendData(new DataPoint(x, y), true, 500);
-        }
+        seriestemp = new LineGraphSeries<DataPoint>();
+        seriestemp.setDrawDataPoints(true);
+        seriestemp.setDataPointsRadius(10);
+        serieshum= new LineGraphSeries<DataPoint>();
+        serieshum.setDrawDataPoints(true);
+        serieshum.setDataPointsRadius(10);
 
         btnTand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,26 +104,34 @@ public class MainActivity extends AppCompatActivity {
     private void getData() {
             new Thread(new Runnable() {
 
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void run() {
                     while(true){
                     value1 = getSiteString(url1);//url1
                     value2 = getSiteString(url2);//url2
+                    getSiteString("http://84.217.9.249/data/test/0"); //grafdata
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             outputText = findViewById(R.id.outputTextView);
                             outputText2 = findViewById(R.id.outputTextView2);
-                            graph = (GraphView) findViewById(R.id.tempgraph);
+                            graphtemp = (GraphView) findViewById(R.id.tempgraph);
+                            graphhum = (GraphView) findViewById(R.id.humgraph);
                             if (outputText != null) {
                                 outputText.setText(value1);
                             }
                             if (outputText2 != null) {
                                 outputText2.setText(value2);
                             }
-                            if(graph != null) {
-                                graph.addSeries(series);
+                            if(graphtemp != null) {
+                                graphtemp.getViewport().setScalableY(true);
+                                graphtemp.addSeries(seriestemp);
+                            }
+                            if(graphhum != null) {
+                                graphhum.getViewport().setScalableY(true);
+                                graphhum.addSeries(serieshum);
                             }
                         }
                     });
@@ -154,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private String getSiteString(String site){
         HttpURLConnection connection = null;
         URL url;
@@ -173,6 +183,25 @@ public class MainActivity extends AppCompatActivity {
                 }
                 JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
                 //output = jsonObject.getJSONObject("cpu_thermal-virtual-0").getString("temp1");
+
+                if(site.equals("http://84.217.9.249/data/test/0")){
+                    jsonObject.keys().forEachRemaining(key -> {
+                    try {
+                        Object value = jsonObject.get(key);
+                        JSONObject jsonObject2 = new JSONObject(String.valueOf(value));
+                        int value2 = Integer.parseInt(jsonObject2.getString("temperature"));
+                        int value3 = Integer.parseInt(jsonObject2.getString("humidity"));
+                        if(Integer.parseInt(key) > x) {
+                            seriestemp.appendData(new DataPoint(Integer.parseInt(key), value2), true, 10);
+                            serieshum.appendData(new DataPoint(Integer.parseInt(key), value3), true, 10);
+                            x = Integer.parseInt(key);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    });
+                }
                 output = jsonObject.toString();
                 output = output.replaceAll("[{}\"]","");
 

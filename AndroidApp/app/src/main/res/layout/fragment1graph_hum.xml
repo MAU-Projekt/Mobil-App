@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#6B3A3636"
-    tools:context=".Fragmentgraph1">
+    tools:context=".Fragment1graphHum">
 
     <com.jjoe64.graphview.GraphView
-        android:id="@+id/tempgraph"
+        android:id="@+id/humgraph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="2dp"

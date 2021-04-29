@@ -24,7 +24,24 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_fragment1_to_fragmentgraph1">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="fragment1graphHum">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-224" />
+                            <option name="y" value="303" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
