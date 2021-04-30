@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -126,12 +127,16 @@ public class MainActivity extends AppCompatActivity {
                                 outputText2.setText(value2);
                             }
                             if(graphtemp != null) {
-                                graphtemp.getViewport().setScalableY(true);
                                 graphtemp.addSeries(seriestemp);
+                                graphtemp.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(MainActivity.this));
+                                graphtemp.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+                                graphtemp.getViewport().setScalableY(true);
                             }
                             if(graphhum != null) {
-                                graphhum.getViewport().setScalableY(true);
                                 graphhum.addSeries(serieshum);
+                                graphhum.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(MainActivity.this));
+                                graphhum.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+                                graphhum.getViewport().setScalableY(true);
                             }
                         }
                     });
@@ -148,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //if(outputText != null) tända rätt kruka
+                //if(outputText2 != null) tända rätt kruka
                 sendSiteString("http://84.217.9.249:80/light/kugaljus","PUT");
 
             }
@@ -182,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
                     buffer.append(line);
                 }
                 JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
-                //output = jsonObject.getJSONObject("cpu_thermal-virtual-0").getString("temp1");
 
                 if(site.equals("http://84.217.9.249/data/test/0")){
                     jsonObject.keys().forEachRemaining(key -> {
@@ -192,14 +198,13 @@ public class MainActivity extends AppCompatActivity {
                         int value2 = Integer.parseInt(jsonObject2.getString("temperature"));
                         int value3 = Integer.parseInt(jsonObject2.getString("humidity"));
                         if(Integer.parseInt(key) > x) {
-                            seriestemp.appendData(new DataPoint(Integer.parseInt(key), value2), true, 10);
-                            serieshum.appendData(new DataPoint(Integer.parseInt(key), value3), true, 10);
+                            seriestemp.appendData(new DataPoint(Double.parseDouble(key)*60000, value2), true, 10);
+                            serieshum.appendData(new DataPoint(Double.parseDouble(key)*60000, value3), true, 10);
                             x = Integer.parseInt(key);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     });
                 }
                 output = jsonObject.toString();
@@ -280,8 +285,7 @@ public class MainActivity extends AppCompatActivity {
         if(result != null){
             if(result.getContents() != null){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                krukorTot = krukorTot+1;
-                if(krukorTot == 1){
+                if(outputText != null){
                     url1 = result.getContents();
                     editor.putString("url1", result.getContents()); // Storing string
                     editor.apply();
@@ -289,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-                else if(krukorTot ==2){
+                else if(outputText2 != null){
                     url2 = result.getContents();
                     editor.putString("url2", result.getContents()); // Storing string
                     editor.apply();
