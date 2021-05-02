@@ -34,6 +34,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Timestamp;
 
 public class MainActivity extends AppCompatActivity {
     private TextView outputText;
@@ -50,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private GraphView graphtemp;
     private GraphView graphhum;
     private int x = 0;
-    private int y;
+    private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    private long time = timestamp.getTime() - 43200000L; //0,5 dygn
+
 
 
     @Override
@@ -111,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
                     while(true){
                     value1 = getSiteString(url1);//url1
                     value2 = getSiteString(url2);//url2
-                    getSiteString("http://84.217.9.249/data/test/0"); //grafdata
+                    time = time + 1800000L; //+30 min i millis
+                    getSiteString("http://84.217.9.249/data/test/" + time / 60000); //grafdata, timestamp i min
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -179,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 url = new URL(site);
+                System.out.println(site);
                 connection =(HttpURLConnection) url.openConnection();
                 connection.connect();
                 InputStream stream = connection.getInputStream();
@@ -190,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
 
-                if(site.equals("http://84.217.9.249/data/test/0")){
+                if(!site.equals(url1) && !site.equals(url2)){
                     jsonObject.keys().forEachRemaining(key -> {
                     try {
                         Object value = jsonObject.get(key);
@@ -198,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
                         int value2 = Integer.parseInt(jsonObject2.getString("temperature"));
                         int value3 = Integer.parseInt(jsonObject2.getString("humidity"));
                         if(Integer.parseInt(key) > x) {
-                            seriestemp.appendData(new DataPoint(Double.parseDouble(key)*60000, value2), true, 10);
-                            serieshum.appendData(new DataPoint(Double.parseDouble(key)*60000, value3), true, 10);
+                            seriestemp.appendData(new DataPoint(Double.parseDouble(key)*60000, value2), true, 500);
+                            serieshum.appendData(new DataPoint(Double.parseDouble(key)*60000, value3), true, 500);
                             x = Integer.parseInt(key);
                         }
                     } catch (JSONException e) {
