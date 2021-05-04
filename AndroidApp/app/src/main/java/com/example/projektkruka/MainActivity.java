@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private GraphView graphhum;
     private int x = 0;
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-    private long time = timestamp.getTime() - 43200000L; //0,5 dygn
+    private long time = timestamp.getTime() - 172800000L; //2 dygn
 
 
 
@@ -75,11 +75,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(url2);
 
         seriestemp = new LineGraphSeries<DataPoint>();
-        seriestemp.setDrawDataPoints(true);
-        seriestemp.setDataPointsRadius(10);
         serieshum= new LineGraphSeries<DataPoint>();
-        serieshum.setDrawDataPoints(true);
-        serieshum.setDataPointsRadius(10);
 
         btnTand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,8 +110,10 @@ public class MainActivity extends AppCompatActivity {
                     while(true){
                     value1 = getSiteString(url1);//url1
                     value2 = getSiteString(url2);//url2
-                    time = time + 1800000L; //+30 min i millis
-                    getSiteString("http://84.217.9.249/data/test/" + time / 60000); //grafdata, timestamp i min
+                    if(time < timestamp.getTime()) {
+                        time = time + 3600000L; //+1h i millis
+                        getSiteString("http://84.217.9.249/data/test/" + time / 60000); //grafdata, timestamp i min
+                    }
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -144,11 +142,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    try {
-                        Thread.sleep(2000);
+                    /*try {
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }           }
+                    }
+                     */
+                            }
                 }
             }).start();
         }
@@ -202,11 +202,17 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonObject2 = new JSONObject(String.valueOf(value));
                         int value2 = Integer.parseInt(jsonObject2.getString("temperature"));
                         int value3 = Integer.parseInt(jsonObject2.getString("humidity"));
-                        if(Integer.parseInt(key) > x) {
-                            seriestemp.appendData(new DataPoint(Double.parseDouble(key)*60000, value2), true, 500);
-                            serieshum.appendData(new DataPoint(Double.parseDouble(key)*60000, value3), true, 500);
-                            x = Integer.parseInt(key);
-                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(Integer.parseInt(key) > x) {
+                                    seriestemp.appendData(new DataPoint(Double.parseDouble(key)*60000, value2), true, 1000);
+                                    serieshum.appendData(new DataPoint(Double.parseDouble(key)*60000, value3), true, 1000);
+                                    x = Integer.parseInt(key);
+                                }
+                            }
+                        });
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
