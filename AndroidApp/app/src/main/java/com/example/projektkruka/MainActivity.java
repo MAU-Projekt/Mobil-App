@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     value2 = getSiteString(url2);//url2
                     if(time < timestamp.getTime()) {
                         time = time + 3600000L; //+1h i millis
-                        getSiteString("http://84.217.9.249/data/test/" + time / 60000); //grafdata, timestamp i min
+                        getSiteString("https://kruka.xyz/data/test/" + time / 60000); //grafdata, timestamp i min
                     }
 
                     runOnUiThread(new Runnable() {
@@ -142,12 +142,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    /*try {
-                        Thread.sleep(1000);
+                    try {
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                     */
+
                             }
                 }
             }).start();
