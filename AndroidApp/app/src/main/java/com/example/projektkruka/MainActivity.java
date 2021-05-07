@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private GraphView graphhum;
     private int x = 0;
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-    private long time = timestamp.getTime() - 172800000L; //2 dygn
+    private Timestamp timestamp2;
+    private long time = timestamp.getTime() - 43200000L; //0,5 dygn
 
 
 
@@ -108,11 +109,12 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     while(true){
-                    value1 = getSiteString(url1);//url1
-                    value2 = getSiteString(url2);//url2
-                    if(time < timestamp.getTime()) {
-                        time = time + 3600000L; //+1h i millis
-                        getSiteString("https://kruka.xyz/data/test/" + time / 60000); //grafdata, timestamp i min
+                    timestamp2 = new Timestamp(System.currentTimeMillis());
+                    value1 = getSiteString(url1+(timestamp2.getTime()/60000-1));//url1
+                    //value2 = getSiteString(url2);//url2
+                    if(time < timestamp2.getTime()) {
+                        time = time + 600000L; //+10min i millis
+                        getSiteString(url1 + (time / 60000)); //grafdata, timestamp i min
                     }
 
                     runOnUiThread(new Runnable() {
@@ -193,15 +195,15 @@ public class MainActivity extends AppCompatActivity {
                 while((line = reader.readLine()) != null){
                     buffer.append(line);
                 }
-                JSONObject jsonObject = new JSONObject(String.valueOf(buffer));
+                JSONObject jsonObjectOrg = new JSONObject(String.valueOf(buffer));
 
-                if(!site.equals(url1) && !site.equals(url2)){
-                    jsonObject.keys().forEachRemaining(key -> {
+                if(!site.equals(url1+(timestamp2.getTime()/60000-1)) && !site.equals(url2)){
+                    jsonObjectOrg.keys().forEachRemaining(key -> {
                     try {
-                        Object value = jsonObject.get(key);
+                        Object value = jsonObjectOrg.get(key);
                         JSONObject jsonObject2 = new JSONObject(String.valueOf(value));
                         int value2 = Integer.parseInt(jsonObject2.getString("temperature"));
-                        int value3 = Integer.parseInt(jsonObject2.getString("humidity"));
+                        int value3 = Integer.parseInt(jsonObject2.getString("soil humidity"));
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -218,10 +220,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     });
                 }
-                output = jsonObject.toString();
-                output = output.replaceAll("[{}\"]","");
-
-
+                else if(site.equals(url1+(timestamp2.getTime()/60000-1))) {
+                    Object directvalue = jsonObjectOrg.get(String.valueOf(timestamp2.getTime() / 60000));
+                    JSONObject jsonObject1 = new JSONObject(String.valueOf(directvalue));
+                    output = "Temperature: " + jsonObject1.getString("temperature") + "\n" + "Soil Humidity: " + jsonObject1.getString("soil humidity") + "\n" + "Humidity: " + jsonObject1.getString("humidity");
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -313,9 +316,6 @@ public class MainActivity extends AppCompatActivity {
                     dialog.show();
 
                 }
-
-
-
             }
             else{
                 Toast.makeText(this, "no result", Toast.LENGTH_LONG).show();
@@ -324,9 +324,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             super.onActivityResult(requestCode, resultCode, data);
         }
-
     }
-
-
 
     }
