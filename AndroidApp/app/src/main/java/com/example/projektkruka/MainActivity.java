@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private int x = 0;
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     private Timestamp timestamp2;
-    private long time = timestamp.getTime() - 43200000L; //0,5 dygn
+    private long time = timestamp.getTime() - 86400000L; //1 dygn
 
 
 
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     value1 = getSiteString(url1+(timestamp2.getTime()/60000-1));//url1
                     //value2 = getSiteString(url2);//url2
                     if(time < timestamp2.getTime()) {
-                        time = time + 600000L; //+10min i millis
+                        time = time + 1800000L; //+30min i millis
                         getSiteString(url1 + (time / 60000)); //grafdata, timestamp i min
                     }
 
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 //if(outputText != null) tända rätt kruka
                 //if(outputText2 != null) tända rätt kruka
-                sendSiteString("http://84.217.9.249:80/light/kugaljus","PUT");
+                sendSiteString("https://kruka.xyz/control/000000029d36c117/led/true","PUT");
 
             }
         }).start();
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sendSiteString("http://84.217.9.249:80/light/kugaljus","DELETE");
+                sendSiteString("https://kruka.xyz/control/000000029d36c117/led/false","PUT");
 
             }
         }).start();
