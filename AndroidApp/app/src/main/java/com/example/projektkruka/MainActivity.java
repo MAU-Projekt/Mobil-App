@@ -53,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
     private int x = 0;
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     private Timestamp timestamp2;
-    private long time = timestamp.getTime() - 86400000L; //1 dygn
+    private long time = timestamp.getTime() - 259200000L; //3 dygn
 
 
-
+//Fabian, Arian
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
         editor = pref.edit(); // create editor
         url1 = pref.getString("url1", null); // getting String
         url2 = pref.getString("url2", null); // getting String
-        System.out.println(url1);
-        System.out.println(url2);
 
         seriestemp = new LineGraphSeries<DataPoint>();
         serieshum= new LineGraphSeries<DataPoint>();
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         getData();
     }
 
-
+//Fabian
     private void getData() {
             new Thread(new Runnable() {
 
@@ -113,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     value1 = getSiteString(url1+(timestamp2.getTime()/60000-1));//url1
                     //value2 = getSiteString(url2);//url2
                     if(time < timestamp2.getTime()) {
-                        time = time + 1800000L; //+30min i millis
+                        time = time + 3600000L; //+1h i millis
                         getSiteString(url1 + (time / 60000)); //grafdata, timestamp i min
                     }
 
@@ -154,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
         }
-
+//Fabian
     private void tandLampa(){
         new Thread(new Runnable() {
             @Override
@@ -166,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+//Fabian
     private void slackLampa(){
         new Thread(new Runnable() {
             @Override
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
-
+    //Fabian
     @RequiresApi(api = Build.VERSION_CODES.N)
     private String getSiteString(String site){
         HttpURLConnection connection = null;
@@ -247,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    //Fabian
     private void sendSiteString(String site, String message){
         HttpURLConnection connection = null;
         URL url;
@@ -283,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    //Arian
     private void scanCode(){
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCaptureActivity(CaptureAct.class);
@@ -292,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
         integrator.initiateScan();
 
     }
+    //Fabian, Arian
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
